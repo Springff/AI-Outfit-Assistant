@@ -49,28 +49,6 @@ class Config:
     embedding_model_path = "qwen2chat_src/AI-ModelScope/bge-small-zh-v1___5"
     max_new_tokens = 8192
 
-def load_vector_database(persist_dir: str) -> ChromaVectorStore:
-    """
-    加载或创建向量数据库
-    
-    Args:
-        persist_dir (str): 持久化目录路径
-    
-    Returns:
-        ChromaVectorStore: 向量存储对象
-    """
-    # 检查持久化目录是否存在
-    if os.path.exists(persist_dir):
-        print(f"正在加载现有的向量数据库: {persist_dir}")
-        chroma_client = chromadb.PersistentClient(path=persist_dir)
-        chroma_collection = chroma_client.get_collection("dress")
-    else:
-        print(f"创建新的向量数据库: {persist_dir}")
-        chroma_client = chromadb.PersistentClient(path=persist_dir)
-        chroma_collection = chroma_client.create_collection("dress")
-    print(f"Vector store loaded with {chroma_collection.count()} documents")
-    return ChromaVectorStore(chroma_collection=chroma_collection)
-
 def load_data(data_path: str) -> List[TextNode]:
     """
     加载并处理PDF数据
@@ -99,6 +77,29 @@ def load_data(data_path: str) -> List[TextNode]:
         node.metadata = src_doc.metadata
         nodes.append(node)
     return nodes
+
+def load_vector_database(persist_dir: str) -> ChromaVectorStore:
+    """
+    加载或创建向量数据库
+    
+    Args:
+        persist_dir (str): 持久化目录路径
+    
+    Returns:
+        ChromaVectorStore: 向量存储对象
+    """
+    # 检查持久化目录是否存在
+    if os.path.exists(persist_dir):
+        print(f"正在加载现有的向量数据库: {persist_dir}")
+        chroma_client = chromadb.PersistentClient(path=persist_dir)
+        chroma_collection = chroma_client.get_collection("dress")
+    else:
+        print(f"创建新的向量数据库: {persist_dir}")
+        chroma_client = chromadb.PersistentClient(path=persist_dir)
+        chroma_collection = chroma_client.create_collection("dress")
+    print(f"Vector store loaded with {chroma_collection.count()} documents")
+    return ChromaVectorStore(chroma_collection=chroma_collection)
+
 
 class VectorDBRetriever(BaseRetriever):
     """向量数据库检索器"""
