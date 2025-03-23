@@ -212,19 +212,20 @@ def generate_response(message):
     llm = setup_llm(config)
     vector_store = load_vector_database(persist_dir=config.persist_dir)
     query_str = message
-    query_embedding = embed_model.get_query_embedding(query_str)
-    query_mode = "default"
-    vector_store_query = VectorStoreQuery(
-        query_embedding=query_embedding, similarity_top_k=2, mode=query_mode
-    )
-    query_result = vector_store.query(vector_store_query)
+    
+    # query_embedding = embed_model.get_query_embedding(query_str)
+    # query_mode = "default"
+    # vector_store_query = VectorStoreQuery(
+    #     query_embedding=query_embedding, similarity_top_k=2, mode=query_mode
+    # )
+    # query_result = vector_store.query(vector_store_query)
 
-    nodes_with_scores = []
-    for index, node in enumerate(query_result.nodes):
-        score: Optional[float] = None
-        if query_result.similarities is not None:
-            score = query_result.similarities[index]
-        nodes_with_scores.append(NodeWithScore(node=node, score=score))
+    # nodes_with_scores = []
+    # for index, node in enumerate(query_result.nodes):
+    #     score: Optional[float] = None
+    #     if query_result.similarities is not None:
+    #         score = query_result.similarities[index]
+    #     nodes_with_scores.append(NodeWithScore(node=node, score=score))
     
     # 设置检索器
     retriever = VectorDBRetriever(
